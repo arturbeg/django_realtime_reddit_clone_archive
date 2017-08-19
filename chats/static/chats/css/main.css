@@ -1,0 +1,942 @@
+.follow_button {
+  background-color: rgba(0,0,0,1);
+  color: white;
+  font-weight: bold;
+  height: 31px;
+  border-radius: 3px;
+  line-height: 20px;
+  width: 220px;
+  max-width: 220px;
+  font-size: 14px;
+  box-shadow: none;
+  border: none;
+  width: 200px;
+
+
+}
+
+.follow_button:hover {
+  background-color: black;
+}
+
+
+
+.follow_button:active,.follow_button:focus  {
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+
+#stats {
+  margin-top: 20px;
+  font-size: 14px;
+  
+
+}
+
+
+.bold {
+
+font-weight: bold;
+
+
+}
+
+
+.astat {
+  margin: 5px;
+}
+
+#about_chat {
+
+
+margin-top: 10px;
+
+}
+
+
+.top_message {
+  margin-top: 10px;
+
+
+
+}
+
+.text {
+  
+  opacity: 0.5;
+  font-weight: normal;
+  line-height: 16px;
+  
+}
+
+
+.text_below {
+  
+  opacity: 0.7;
+  font-weight: normal;
+  line-height: 16px;
+  margin-left: 5px;
+}
+
+
+
+
+.heart {
+  color: red;
+
+}
+
+.arrows {
+  opacity: 0.5;
+  
+}
+
+.up-down {
+ 
+ margin-top: -7px; 
+
+}
+
+
+
+
+
+.chat_info_container {
+  background-color: #fafafa;
+  border: none;
+  box-shadow: none;
+
+  
+
+}
+
+.post {
+
+  max-width: 690px;
+  margin-left: auto;
+  margin-right: auto;
+
+
+}
+
+.chat_info {
+
+ margin-left: auto;
+ margin-right: auto;
+
+ max-width: 590px;
+
+
+ }
+
+.avatar {
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+
+}
+
+.username {
+  text-align: center;
+  font-weight: 200;
+
+
+}
+
+.user_describtion  {
+  text-align: center;
+  font-weight: 400;
+  
+
+}
+
+.user_stats {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 80%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 200;
+
+}
+
+
+.number {
+  font-weight: 400;
+
+}
+
+.user_post {
+  margin-top: 30px;
+  max-width: 690px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
+.username_small {
+  margin-left: 15px;
+  font-weight: 600;
+}
+
+.chat_name_small {
+  opacity: 0.5;
+  margin-left: 3px; 
+}
+
+
+
+.user_message {
+  margin-left: 45px;
+}
+
+
+.likes_comments {
+  margin-left: 45px;
+}
+
+
+.comment_icon {
+  color: #B3B3B3;
+  margin-left: 5px;
+}
+
+
+.time_uploaded {
+  text-align: right;
+  font-size: 14px;
+  opacity: 0.5;
+  float: right;
+}
+
+
+.likes_comments > hr {
+  border-top: 1px solid #979797;
+  opacity: 0.7;
+}
+
+@media screen and (max-width: 480px) {
+  .context {
+    display: none;
+  }
+} 
+
+.context {
+  float: right;
+}
+
+.selection {
+  
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+
+
+.select1, .select2, .select3 {
+  margin-left: 10px;
+  font-size: 18px;
+  
+}
+
+}
+
+.select1, .select3 {
+  opacity: 0.3;
+
+}
+
+.select2 {
+  font-weight: 500;
+}
+
+@media screen 
+and (min-width : 768px) {
+
+.select1, .select2, .select3 {
+  margin-left: 10px;
+  font-size: 24px;
+  
+}
+
+
+}
+
+
+
+.trending_post {
+
+  margin-top: 50px;
+  max-width: 830px;
+  background-color: grey;
+ 
+  max-height: 114px;
+  margin-left: auto;
+  margin-right: auto;
+
+  
+
+}
+
+
+.arrow {
+
+  font-size: 30px;
+  opacity: 0.5;
+
+}
+
+.arrow_up {
+  float: left;
+}
+
+.trending_post_content {
+
+  max-width: 640px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px rgba(151,151,151,0.3) solid;
+  overflow: hidden;
+
+
+  
+
+}
+
+.trending_logo {
+ 
+
+width: 70px;
+
+
+
+}
+
+.trending_post_name {
+
+  margin-left: 90px;
+  
+
+}
+
+.trending_top_message {
+  display: block;
+  margin-top: 5px;
+  
+
+
+  
+}
+
+.message_content {
+  margin-left: 40px;
+  font-size: 80%;
+  display: block;
+  opacity: 0.5;
+
+}
+
+.trending_post_new {
+  margin-top: 20px;
+}
+
+
+
+@media screen 
+and (max-width : 1024px) {
+
+.arrow_trending_down, .arrow_trending_up {
+  display: none;
+}
+
+
+}
+
+
+.number_of_likes {
+  color: black;
+  font-weight: 400;
+  font-size: 13px;
+  margin-left: -7px;
+  margin-bottom: 4px;
+
+}
+
+
+
+
+.arrow_trending_down {
+  
+  font-size: 50px;
+  margin-top: -75px;
+
+}
+
+
+.arrow_trending_up {
+ 
+  font-size: 50px;
+  margin-top: 30px;
+  margin-left: 0px;
+}
+
+
+@media screen and (max-width:992px) {
+  .left_section {
+    display: none;
+  }
+
+  .right_section {
+    display: none;
+  }
+}
+
+.middle_section {
+  max-width: 701px;
+}
+
+
+
+
+.left_section h4 {
+
+text-align: center;
+opacity: 0.5;
+font-weight: 300;
+font-size: 20px;
+
+}
+
+.left_section .panel .heading h5 {
+  font-size: 16px;
+  text-align: center;
+  opacity: 0.5;
+  font-weight: 300;
+
+}
+
+
+
+.heading {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  height: 65px;
+
+
+
+}
+
+.local_chats_text {
+
+color: rgba(0,0,0,1);
+font-weight: 400;
+
+
+}
+
+.local_chat_content {
+  
+}
+
+
+.local_chat_content h5 {
+  text-align: left;
+  font-weight: 400;
+}
+
+.star {
+  opacity: 0.5;
+  color: #231F1F;
+}
+
+
+.number_of_favs {
+  font-size: 14px;
+}
+
+.local_chat_message p {
+  font-size: 10px;
+  margin-left: 75px;
+  
+}
+
+
+.panel-body-adjusted {
+  padding: 5px;
+}
+
+
+.chat_title h4 {
+
+  font-size: 16px;
+  text-align: center;
+  opacity: 0.5;
+  font-weight: 300;
+
+
+}
+
+.chat_title h5 {
+
+  font-size: 14px;
+  text-align: center;
+  opacity: 0.3;
+  font-weight: 400;
+
+
+
+}
+
+
+.chat_title {
+
+width: 100%;
+margin: auto;
+
+
+
+
+
+}
+
+.right_icons {
+  
+  float: right;
+  font-size: 20px;
+  margin-top: 10px;
+  opacity: 0.7;
+}
+
+.local_chat_name {
+  margin-left: 5px;
+}
+
+.messages_wrapper {
+  overflow: none;
+  position: relative;
+  width: 90%;
+
+  height: 400px;
+  border-radius: 10px;
+  
+}
+
+.chat_messages {
+  overflow: auto;
+  position: absolute;
+  bottom: 10px;
+  max-height: 400px;
+}
+
+
+
+.msg h5 {
+  margin-left: 50px;
+  font-size: 14px;
+}
+
+
+.msg .time {
+
+  font-size: 10px;
+  opacity: 0.5;
+  margin-left: 5px;
+}
+
+
+.msg_body {
+  margin-left: 50px;
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.right_section h4 {
+
+text-align: center;
+opacity: 0.5;
+font-weight: 300;
+font-size: 20px;
+
+}
+
+.message_clip input {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  height: 30px;
+  width: 100%
+  padding: 20px;
+  
+  width: 95%
+
+}
+
+.send_message input:focus {
+  box-shadow: none;
+}
+
+.message_clip {
+  width: 100%;
+  
+}
+
+.clip {
+  font-size: 20px;
+  margin-top: 5px;
+  margin-left: 5px;
+  color: #231F1F;
+  opacity: 0.5;
+  width: 3%;
+  
+
+}
+
+.participant h5{
+  
+  margin-left: 40px;
+  line-height: 30px;
+  font-weight: 400;
+  
+}
+
+.participant hr {
+  border-top: 1px solid #979797;
+  opacity: 0.3;
+  margin-top: 3px;
+  
+}
+
+.participants {
+  padding: 10px;
+}
+
+
+
+
+
+.fractal_brend {
+  width: 50%;
+  margin: auto;
+  color: rgba(0,0,0,1);
+  text-align: center;
+  
+  font-size: 50px;
+
+}
+
+
+.sign_in {
+  
+  width: 80%;
+  margin: auto;
+}
+
+
+.sign_in form input {
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  height: 35px;
+  box-sizing: border-box;
+  padding: 9px;
+  border: 1px solid #efefef;
+  font-size: 14px;
+  border-radius: 3px;
+  color: black;
+  display: block;
+  background-color: rgba(255,255,255,1);
+  
+ 
+  
+
+ }
+
+ .sign_in form input[type=password] {
+  margin-top: 5px;
+ }
+
+
+ .sign_in form button {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  margin-top: 10px;
+  color: white;
+  background-color: black;
+  border: none;
+  border-radius: 3px;
+  font-weight: bold;
+  height: 30px;
+
+ }
+
+
+  .sign_in form input:focus {
+    
+    outline: none;
+    border: 1px solid #b2b2b2;
+
+  }
+
+ .sign_in form button:focus {
+
+
+ outline:0;
+ background-color: rgba(0,0,0,0.7);
+
+
+
+ }
+
+
+.sign_in form input::placeholder {
+  
+  opacity: 0.5;
+}
+
+.sign_in a {
+  
+  color: black;
+
+}
+
+
+.sign_in a:hover,.sign_in a:active  {
+  
+  text-decoration: none; 
+  
+  font-weight: 500;
+
+
+}
+
+.forgot {
+  margin: auto;
+  
+  text-align: center;
+  margin-top: 10px;
+}
+  
+
+.sign_in h5 {
+  text-align: center;
+  font-size: 16px;
+  opacity: 0.5;
+  font-weight: 500; 
+}
+
+.sign_up input {
+
+  margin-top: 10px;
+
+}
+
+
+
+.sign_up {
+  margin: auto;
+  text-align: center;
+}
+
+
+
+
+.c-g-i {
+
+
+  max-width: 400px;
+  margin: auto;
+  padding: 10px;
+
+
+
+}
+
+.c-g-i img {
+
+  width: 100px;
+}
+
+
+.main-info h3 {
+
+
+
+}
+
+
+.main-info {
+
+  margin-left: 110px;
+}
+
+.follow-btn {
+
+  width: 100%;
+  max-width: 173px;
+  margin: auto;
+  background-color: black;
+  color: white;
+  margin-top: 5px;
+  font-weight: 500;
+  outline: none
+
+}
+
+
+.follow-btn-big {
+
+  width: 100px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  outline: none;
+  margin-left: 10px;
+
+
+ }
+
+.follow-btn-big:hover, .follow-btn-big:focus  {
+  color: white;
+}
+
+
+.follow-btn:hover {
+  color: white;
+
+}
+
+.follow-btn:focus {
+
+  color: white;
+  outline: none;
+
+}
+
+.follow-btn:active {
+  outline: none;
+
+}
+
+.clear {
+  clear: both;
+}
+
+.other-info {
+
+  margin-top: 5px;
+}
+
+
+.followers span, .local-chats span, .topics span {
+
+  font-weight: 500;
+
+}
+
+.local-chats, .topics {
+  margin-left: 3px;
+}
+.group-stats, .group-about {
+  font-size: 15px;
+  margin-left: 10px;
+
+}
+
+.group-about {
+  margin-top: 5px;
+}
+
+@media (min-width: 768px) {
+
+
+  .c-g-i img {
+
+  width: 130px;
+}
+
+
+.follow-btn {
+  display: none
+}
+
+
+.clear {
+  clear: none;
+}
+
+
+
+.c-g-i {
+
+
+  max-width: 600px;
+  min-width: 600px;
+
+
+
+
+
+}
+
+.clear-medium {
+
+  clear:both;
+}
+
+
+.main-info h4 {
+  font-size: 22px;
+}
+
+.main-info {
+  margin-left: 10px;
+}
+
+.info {
+  margin-left: 150px;
+}
+
+.group-stats, .group-about  {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+
+}
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+
+  .follow-btn-big {
+    display: none;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

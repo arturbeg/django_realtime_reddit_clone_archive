@@ -1,0 +1,53 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Trending Topics {% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+<h1> Trending Topics </h1>
+
+
+<ul>
+
+
+{% for topic in object_list %}
+
+
+    <h2> Topic number {{topic.id}}</h2>
+
+
+    The name of the Topic  <strong>{{topic.name }} </strong><hr>
+    What the topic is about <strong> {{topic.about }}</strong> <hr>
+
+    Chatgroup {{topic.chatgroup}}<hr>
+
+
+
+    What the chatgroup is about ---- {{topic.chatgroup.about}}
+
+
+
+
+
+
+{%endfor%}
+
+
+
+
+
+</ul>
+
+
+{% endblock %}
+
+
+
+

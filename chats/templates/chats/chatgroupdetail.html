@@ -1,0 +1,78 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Create a new ChatGroup {% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+<h1> {{object.name}}</h1>
+
+
+{{object.about}} <hr>
+
+
+{% if request.user.is_authenticated %}
+
+<form method="post" action="{% url "chatgroup-follow" %}">
+
+{% csrf_token %}
+
+
+
+<input type="hidden" name="chat_group_id" value="{{object.id}}" />
+<button>
+
+
+{% if request.user in object.members.all %}
+
+
+Unfollow
+
+
+{% else %}
+
+
+Follow
+
+
+{% endif %}
+
+
+
+
+</button>
+
+
+
+</form>
+
+
+
+{% endif %}
+
+{% if request.user in object.members.all %}
+
+Is following
+
+
+{% endif %}
+
+
+{% if is_owner%}
+
+
+{% include "snippets/new_local_chat_form.html" %}
+
+{% endif %}
+
+{% endblock %}
+
+
+
+

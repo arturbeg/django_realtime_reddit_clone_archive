@@ -1,0 +1,32 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Create a new ChatGroup {% endblock %}
+
+
+
+
+{% block content %}
+
+
+<img class="img-circle" src="{{object.avatar.url}}" height="200px">
+
+
+
+Username: {{object.user.username}} <hr>
+About the user: {{object.about}} <hr>
+The number of followers {{object.get_number_of_followers}} <hr>
+The number of following {{object.get_number_of_following}} <hr>
+The number of chatgroups following {{chatgroups_following}}  <hr>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+

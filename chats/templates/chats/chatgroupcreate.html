@@ -1,0 +1,48 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Create a new ChatGroup {% endblock %}
+
+
+
+
+{% block content%}
+
+
+
+	<form method="post">{% csrf_token %}
+
+
+
+
+
+			{% for field in form %}
+			<div class="form-group">
+      <p>
+
+        {{ field }}
+
+
+
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </p>
+		</div>
+    {% endfor %}
+
+	<button type="submit">Create</button>
+
+
+
+
+
+</form>
+
+
+{% endblock %}
+
+
+
+

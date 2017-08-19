@@ -1,0 +1,53 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Trending localchats {% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+<h1> Trending localchats </h1>
+
+
+<ul>
+
+
+{% for localchat in object_list %}
+
+
+    <h2> localchat number {{localchat.id}}</h2>
+
+
+    The name of the localchat  <strong>{{localchat.name }} </strong><hr>
+    What the localchat is about <strong> {{localchat.about }}</strong> <hr>
+
+    Chatgroup {{localchat.chatgroup}}<hr>
+
+
+
+    What the chatgroup is about ---- {{localchat.chatgroup.about}}
+
+
+
+
+
+
+{%endfor%}
+
+
+
+
+
+</ul>
+
+
+{% endblock %}
+
+
+
+
