@@ -12,9 +12,9 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 
 
 
-# Connected to chat-messages
+# Connected to chat-messages, implement later
 
-def msg_consumer(message):
+#def msg_consumer(message):
     # Save to model
 
 
@@ -23,18 +23,60 @@ def msg_consumer(message):
 # Connected to websocket.connect
 
 
-def ws_add(message, room_type, room_label):
+def ws_add(message):
+
 
 
 
     print("The ws_add is called")
 
+    list = message['path'].strip('/').split('/')
+    print(list)
+    prefix = list[0]
+    chat_room_type = list[1]
+    label = list[2]
 
-    # Come back later
+    print('The prefix is ' + prefix)
+    print('chat_room_type is ' + chat_room_type)
+    print('The label is ' + label)
+
+
+    if prefix!='m':
+        print("The prefix has to be m to access the chat room")
+
+
+
+    print("Pulling the chat room out of the database")
+
+    if chat_room_type == "topic":
+        room = Topic.objects.get(label=label)
+        print('the topic has been received, its name is ' + room.name)
+
+    elif chat_room_type == "localchat":
+        room = LocalChat.objects.get(label=label)
+        print('the localchat has been created')
+
+    elif chat_room_type == "globalchat":
+        room = GlobalChat.objects.get(label=label)
+        print('the globalchat has been created')
+
+
+
 
     # Accept the incoming connection
     message.reply_channel.send({"accept": True})
 
+    message.channel_session['room_label'] = room.label
+    print('Channel session - room label ' + message.channel_session['room_label'])
+
+    message.channel_session['room_type'] = chat_room_type
+
+    print('Channel session - room type ' + message.channel_session['room_type'])
+
+    Group('m-' + chat_room_type + label, channel_layer=message.channel_layer).add(message.reply_channel)
+
+
+    print("The execution of the ws_add is completed --------")
     '''
     # Parse the query string
 
@@ -64,6 +106,38 @@ def ws_message(message, room_type, room_label):
 
     print("The ws_message is called")
 
+    chat_room_type = message.channel_session['room_type']
+    print(chat_room_type + " received")
+    label = message.channel_session['room_label']
+    print(label + " received")
+
+
+    data = json.loads(message['text'])
+
+    if chat_room_type == "topic":
+        room = Topic.objects.get(label=label)
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))  # need to finish editing
+        print('the message is ' + m)
+
+    elif chat_room_type == "localchat":
+        room = LocalChat.objects.get(label=label)
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
+
+    elif chat_room_type == "globalchat":
+        room = GlobalChat.objects.get(label=label)
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
+
+    Group('m ' + chat_room_type + label, channel_layer=message.channel_layer).send({'text': json.dumps(
+        m.as_dict())})
+
+
+
+    # Group.send() will take care of sending this message to every reply_channel added to the group.
+
+
+
+
+    '''
 
     Group("chat-%s-%s" % room_type, room_label).send({
 
@@ -72,6 +146,8 @@ def ws_message(message, room_type, room_label):
             "username": message.channel_session["username"]
         }),
     })
+
+    '''
 
 
 
@@ -86,6 +162,32 @@ def ws_message(message, room_type, room_label):
 
 def ws_disconnect(message, room_type, room_label):
     print("The ws_disconnect is called")
+
+    label = message.channel_session['room_label']
+    chat_room_type = message.channel_session['room_type']
+
+    print(chat_room_type + "  " + label)
+    print('Disconnecting...')
+
+
+
+
+    if chat_room_type == "topic":
+        room = Topic.objects.get(label=label)
+
+    elif chat_room_type == "localchat":
+        room = LocalChat.objects.get(label=label)
+
+    elif chat_room_type == "globalchat":
+        room = GlobalChat.objects.get(label=label)
+
+    Group('m-' + chat_room_type + label).discard(message.reply_channel)
+
+
+
+
+
+
 
     Group("chat-%s-%s" % room_type, room_label).discard(message.reply_channel)
 
