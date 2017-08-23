@@ -4,7 +4,9 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
-from django.contrib.auth.decorators import login_required
+
+
+from .views import chat_room
 
 
 
@@ -13,10 +15,9 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
 
-    #url(r'^$', login_required(ChatGroupCreate.as_view()), name='chatgroup-new'),
+   url(r'^(?P<chat_room_type>[\w-]{,50})/(?P<label>[\w-]{,50})/$', chat_room, name='chatroom'),
 
-
-
+    #url(r'^hello/$', chat_room, name='chatroom'),
 
 
 

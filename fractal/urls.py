@@ -19,7 +19,7 @@ from django.contrib import admin
 urlpatterns = [
    url(r'^admin/', admin.site.urls),
    url(r'^', include('chats.urls')),
-   url(r'm/', include('interactive.urls')),
+   url(r'^m/', include('interactive.urls')),
 
 
 

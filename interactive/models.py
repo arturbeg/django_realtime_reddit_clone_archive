@@ -5,13 +5,21 @@ from django.conf import settings
 
 User = settings.AUTH_USER_MODEL
 
+# You are in the django_channels branch
 
 class Message(models.Model):
     text = models.TextField()
     user = models.ForeignKey(User)
-    chatgroup = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-    globalchat = models.ForeignKey(GlobalChat, on_delete=models.CASCADE, blank=True, null=True)
-    localchat = models.ForeignKey(LocalChat, on_delete=models.CASCADE, blank=True, null=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    chatgroup = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, blank=True, null=True, related_name="chatgroup_messages")
+    globalchat = models.ForeignKey(GlobalChat, on_delete=models.CASCADE, blank=True, null=True, related_name="globalchat_messages")
+    localchat = models.ForeignKey(LocalChat, on_delete=models.CASCADE, blank=True, null=True, related_name="localchat_messages")
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True, related_name="topic_messages")
+    timestamp = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+
+    def __str__(self):
+        return str(self.user.username) + "  " + self.text[:20]
+
+
+
 

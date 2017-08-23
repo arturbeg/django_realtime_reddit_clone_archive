@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'interactive',
     'chats',
     'django.contrib.admin',
@@ -78,7 +79,7 @@ WSGI_APPLICATION = 'fractal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fractal',
+        'NAME': 'fractal3',
         'USER': 'root',
         'PASSWORD': 'Artur535129',
         'HOST': 'localhost',
@@ -106,6 +107,19 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "fractal.routing.channel_routing",
+    },
+}
+
 
 
 # Internationalization

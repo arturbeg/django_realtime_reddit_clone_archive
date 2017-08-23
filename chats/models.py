@@ -50,6 +50,7 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(User, related_name="is_member")
     timestamp = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(upload_to="group_avatar", blank=True)
+    label = models.SlugField(unique=True)
 
 
     def __str__(self):
@@ -76,6 +77,7 @@ class Topic(models.Model):
     arrow_downs = models.IntegerField(default=0)
     avatar = models.ImageField(upload_to="topic_avatar", blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    label = models.SlugField(unique=True)
 
 
     def __str__(self):
@@ -98,6 +100,7 @@ class LocalChat(models.Model):
     avatar = models.ImageField(upload_to="local_chat_avatar", blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     participants = models.ManyToManyField(User, related_name="is_participant")
+    label = models.SlugField(unique=True)
 
     def __str__(self):
         return self.name
@@ -106,6 +109,7 @@ class LocalChat(models.Model):
 
 class GlobalChat(models.Model):
     chatgroup = models.OneToOneField(ChatGroup, on_delete=models.CASCADE) # the parent chat group -> one to one relationship
+    #label = models.SlugField(unique=True)
 
 
     def __str__(self):
