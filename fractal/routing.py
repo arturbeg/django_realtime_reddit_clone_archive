@@ -1,25 +1,10 @@
-from interactive import consumers
-from channels.staticfiles import StaticFilesConsumer
+from channels.routing import route
+from interactive.consumers import ws_message, ws_add, ws_disconnect
+channel_routing = [
 
-channel_routing = {
+    route("websocket.connect", ws_add, path=r"^/(?P<room_type>[a-zA-Z0-9_]+)/(?P<room_label>[a-zA-Z0-9_]+)$"),
+    route("websocket.receive", ws_message, path=r"^/(?P<room_type>[a-zA-Z0-9_]+)/(?P<room_label>[a-zA-Z0-9_]+)$"),
+    route("websocket.disconnect", ws_disconnect, path=r"^/(?P<room_type>[a-zA-Z0-9_]+)/(?P<room_label>[a-zA-Z0-9_]+)$"),
 
-
-    # This makes Django serve static files from settings.STATIC_URL, similar
-    # to django.views.static.serve. This isn't ideal (not exactly production
-    # quality) but it works for a minimal example.
-
-    'http.request': StaticFilesConsumer(),
-
-
-
-
-
-
-    # Wire up websocket channels to our consumers
-    'websocket.connect': consumers.ws_connect,
-    'websocket.receive': consumers.ws_receive,
-    'websocket.disconnect': consumers.ws_disconnect,
-}
-
-
+]
 

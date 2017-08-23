@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'fractal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fractal3',
+        'NAME': 'fractal4',
         'USER': 'root',
         'PASSWORD': 'Artur535129',
         'HOST': 'localhost',
@@ -108,8 +108,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# In settings.py
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6379)],
+        },
+        "ROUTING": "fractal.routing.channel_routing",
+    },
+}
 
 
+'''
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -120,6 +131,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+'''
 
 
 # Internationalization

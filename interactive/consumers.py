@@ -5,6 +5,101 @@ from channels import Group
 from channels.sessions import channel_session
 from chats.models import GlobalChat, LocalChat, Topic
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from channels.handler import AsgiHandler
+from urllib.parse import parse_qs
+from channels.auth import channel_session_user, channel_session_user_from_http
+
+
+
+# Connected to chat-messages
+
+def msg_consumer(message):
+    # Save to model
+
+
+
+
+# Connected to websocket.connect
+
+
+def ws_add(message, room_type, room_label):
+
+
+
+    print("The ws_add is called")
+
+
+    # Come back later
+
+    # Accept the incoming connection
+    message.reply_channel.send({"accept": True})
+
+    '''
+    # Parse the query string
+
+    params = parse_qs(message.content["query_string"])
+    print("The query string is parsed: " + params)
+
+    if b"username" in params:
+        # Set the username in the session
+        message.channel_session["username"] = params[b"username"][0].decode("utf8")
+        # Add the user to the group
+
+        Group("chat-%s-%s" % room_type, room_label).add(message.reply_channel)
+    else:
+        # Close the connection
+        message.reply_channel({"close": True})
+
+    '''
+# Connected to websocket.receive
+
+
+
+
+@channel_session
+def ws_message(message, room_type, room_label):
+    # ASGI WebSocket packet-received and send-packet message type
+    # both have a text ket fort ehri textual data
+
+    print("The ws_message is called")
+
+
+    Group("chat-%s-%s" % room_type, room_label).send({
+
+        "text": json.dumps({
+            "text": message["text"],
+            "username": message.channel_session["username"]
+        }),
+    })
+
+
+
+
+
+
+
+
+
+# Connected to websocket.disconnect
+
+
+def ws_disconnect(message, room_type, room_label):
+    print("The ws_disconnect is called")
+
+    Group("chat-%s-%s" % room_type, room_label).discard(message.reply_channel)
+
+
+'''
+def http_consumer(message):
+    response = HttpResponse("Hello world, you asksed for %s" % message.content['path'])
+    # Encode the response into message format (ASGI)
+    for chunk in AsgiHandler.encode_response(response):
+        message.reply_channel.send(chunk)
+
+
+
+
 
 
 
@@ -186,3 +281,4 @@ def ws_disconnect(message):
     except KeyError:
         pass
 
+'''
