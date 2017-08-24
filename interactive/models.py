@@ -20,6 +20,9 @@ class Message(models.Model):
     def __str__(self):
         return str(self.user.username) + "  " + self.text[:20]
 
+    @property
+    def formatted_timestamp(self):
+        return self.timestamp.strftime('%b %-d %-I:%M %p')
 
-
-
+    def as_dict(self):
+        return {'user': self.user.username, 'text': self.text, 'timestamp': self.formatted_timestamp}

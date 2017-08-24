@@ -1,14 +1,14 @@
 import re
 import json
-import logging
 from channels import Group
-from channels.sessions import channel_session
 from chats.models import GlobalChat, LocalChat, Topic
 from django.contrib.auth.models import User
-from django.http import HttpResponse
-from channels.handler import AsgiHandler
-from urllib.parse import parse_qs
-from channels.auth import channel_session_user, channel_session_user_from_http
+#from channels.auth import channel_session_user, channel_session_user_from_http
+from channels.sessions import channel_session
+from chats.models import Topic, LocalChat, GlobalChat
+from interactive.models import Message
+
+
 
 
 
@@ -22,8 +22,8 @@ from channels.auth import channel_session_user, channel_session_user_from_http
 
 # Connected to websocket.connect
 
-
-def ws_add(message):
+@channel_session
+def ws_connect(message):
 
 
 
@@ -33,12 +33,12 @@ def ws_add(message):
     list = message['path'].strip('/').split('/')
     print(list)
     prefix = list[0]
-    chat_room_type = list[1]
-    label = list[2]
+    room_type = list[1]
+    room_label = list[2]
 
     print('The prefix is ' + prefix)
-    print('chat_room_type is ' + chat_room_type)
-    print('The label is ' + label)
+    print('room_type is ' + room_type)
+    print('The label is ' + room_label)
 
 
     if prefix!='m':
@@ -48,16 +48,16 @@ def ws_add(message):
 
     print("Pulling the chat room out of the database")
 
-    if chat_room_type == "topic":
-        room = Topic.objects.get(label=label)
+    if room_type == "topic":
+        room = Topic.objects.get(label=room_label)
         print('the topic has been received, its name is ' + room.name)
 
-    elif chat_room_type == "localchat":
-        room = LocalChat.objects.get(label=label)
+    elif room_type == "localchat":
+        room = LocalChat.objects.get(label=room_label)
         print('the localchat has been created')
 
-    elif chat_room_type == "globalchat":
-        room = GlobalChat.objects.get(label=label)
+    elif room_type == "globalchat":
+        room = GlobalChat.objects.get(label=room_label)
         print('the globalchat has been created')
 
 
@@ -69,85 +69,54 @@ def ws_add(message):
     message.channel_session['room_label'] = room.label
     print('Channel session - room label ' + message.channel_session['room_label'])
 
-    message.channel_session['room_type'] = chat_room_type
+    message.channel_session['room_type'] = room_type
 
     print('Channel session - room type ' + message.channel_session['room_type'])
 
-    Group('m-' + chat_room_type + label, channel_layer=message.channel_layer).add(message.reply_channel)
+    Group('m-' + room_type + room_label, channel_layer=message.channel_layer).add(message.reply_channel)
 
 
     print("The execution of the ws_add is completed --------")
-    '''
-    # Parse the query string
 
-    params = parse_qs(message.content["query_string"])
-    print("The query string is parsed: " + params)
 
-    if b"username" in params:
-        # Set the username in the session
-        message.channel_session["username"] = params[b"username"][0].decode("utf8")
-        # Add the user to the group
 
-        Group("chat-%s-%s" % room_type, room_label).add(message.reply_channel)
-    else:
-        # Close the connection
-        message.reply_channel({"close": True})
 
-    '''
+
 # Connected to websocket.receive
-
-
-
-
 @channel_session
-def ws_message(message, room_type, room_label):
+def ws_receive(message):
     # ASGI WebSocket packet-received and send-packet message type
     # both have a text ket fort ehri textual data
 
     print("The ws_message is called")
 
-    chat_room_type = message.channel_session['room_type']
-    print(chat_room_type + " received")
-    label = message.channel_session['room_label']
-    print(label + " received")
+    room_type = message.channel_session['room_type']
+    print(room_type + " received")
+    room_label = message.channel_session['room_label']
+    print(room_label + " received")
 
 
     data = json.loads(message['text'])
 
-    if chat_room_type == "topic":
-        room = Topic.objects.get(label=label)
+    if room_type == "topic":
+        room = Topic.objects.get(label=room_label)
         m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))  # need to finish editing
-        print('the message is ' + m)
+        print('the message is here')
+        print(m)
 
-    elif chat_room_type == "localchat":
-        room = LocalChat.objects.get(label=label)
+    elif room_type == "localchat":
+        room = LocalChat.objects.get(label=room_label)
         m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
 
-    elif chat_room_type == "globalchat":
-        room = GlobalChat.objects.get(label=label)
+    elif room_type == "globalchat":
+        room = GlobalChat.objects.get(label=room_label)
         m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
 
-    Group('m ' + chat_room_type + label, channel_layer=message.channel_layer).send({'text': json.dumps(
-        m.as_dict())})
-
-
-
-    # Group.send() will take care of sending this message to every reply_channel added to the group.
+    Group('m-' + room_type + room_label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
 
 
 
 
-    '''
-
-    Group("chat-%s-%s" % room_type, room_label).send({
-
-        "text": json.dumps({
-            "text": message["text"],
-            "username": message.channel_session["username"]
-        }),
-    })
-
-    '''
 
 
 
@@ -159,37 +128,74 @@ def ws_message(message, room_type, room_label):
 
 # Connected to websocket.disconnect
 
-
-def ws_disconnect(message, room_type, room_label):
+@channel_session
+def ws_disconnect(message):
     print("The ws_disconnect is called")
 
-    label = message.channel_session['room_label']
-    chat_room_type = message.channel_session['room_type']
+    room_label = message.channel_session['room_label']
+    room_type = message.channel_session['room_type']
 
-    print(chat_room_type + "  " + label)
+    print(room_type + "  " + room_label)
     print('Disconnecting...')
 
 
 
 
-    if chat_room_type == "topic":
-        room = Topic.objects.get(label=label)
+    if room_type == "topic":
+        room = Topic.objects.get(label=room_label)
 
-    elif chat_room_type == "localchat":
-        room = LocalChat.objects.get(label=label)
+    elif room_type == "localchat":
+        room = LocalChat.objects.get(label=room_label)
 
-    elif chat_room_type == "globalchat":
-        room = GlobalChat.objects.get(label=label)
+    elif room_type == "globalchat":
+        room = GlobalChat.objects.get(label=room_label)
 
-    Group('m-' + chat_room_type + label).discard(message.reply_channel)
+    Group('m-' + room_type + room_label).discard(message.reply_channel)
 
-
-
-
+    Group('m-' + room_type + room_label, channel_layer=message.channel_layer).discard(message.reply_channel)
 
 
 
-    Group("chat-%s-%s" % room_type, room_label).discard(message.reply_channel)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 '''
@@ -216,7 +222,7 @@ def ws_connect(message):
 
 
     # Extract the room from the message. This expects message.path to be of the
-    # form /m/{chat_room_type}/{label   }, and finds a Room if the message path is applicable,
+    # form /m/{room_type}/{label   }, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
 
@@ -225,11 +231,11 @@ def ws_connect(message):
         list = message['path'].strip('/').split('/')
         print(list)
         prefix = list[0]
-        chat_room_type = list[1]
+        room_type = list[1]
         label = list[2]
 
         print('The prefix is ' + prefix)
-        print('chat_room_type is ' + chat_room_type)
+        print('room_type is ' + room_type)
         print('The label is ' + label)
         print('Connecting')
 
@@ -242,15 +248,15 @@ def ws_connect(message):
 
 
 
-        if chat_room_type == "topic":
+        if room_type == "topic":
             room = Topic.objects.get(label=label)
             print('the topic has been received, its name is')
 
-        elif chat_room_type == "localchat":
+        elif room_type == "localchat":
             room = LocalChat.objects.get(label=label)
             print('the localchat has been created')
 
-        elif chat_room_type == "globalchat":
+        elif room_type == "globalchat":
             room = GlobalChat.objects.get(label=label)
             print('the globalchat has been created')
 
@@ -275,11 +281,11 @@ def ws_connect(message):
     #message.channel_session['room_label'] = label
     #print(message.channel_session['room_label'])
 
-    message.channel_session['room_type'] = chat_room_type
+    message.channel_session['room_type'] = room_type
 
     print('Channel session 2 ' + message.channel_session['room_type'])
 
-    Group('m-' + chat_room_type + label, channel_layer=message.channel_layer).add(message.reply_channel)
+    Group('m-' + room_type + label, channel_layer=message.channel_layer).add(message.reply_channel)
 
     print('---')
 
@@ -307,14 +313,14 @@ def ws_receive(message):
 
 
     try:
-        chat_room_type = message.channel_session['room_type']
-        print(chat_room_type + " received")
+        room_type = message.channel_session['room_type']
+        print(room_type + " received")
         label = message.channel_session['room_label']
         print(label + " received")
 
 
         #print(label)
-        #print(chat_room_type)
+        #print(room_type)
 
 
         # Parse out a chat message from the content text, bailing if it doesn't
@@ -324,16 +330,16 @@ def ws_receive(message):
         print("The data at the websocket has been received, it is " + data)
         #print(data)
 
-        if chat_room_type == "topic":
+        if room_type == "topic":
             room = Topic.objects.get(label=label)
             m = room.topic_messages.create(text = data['text'], user=User.objects.get(id=1)) # need to finish editing
             print('the message is ' + m)
 
-        elif chat_room_type == "localchat":
+        elif room_type == "localchat":
             room = LocalChat.objects.get(label=label)
             m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
 
-        elif chat_room_type == "globalchat":
+        elif room_type == "globalchat":
             room = GlobalChat.objects.get(label=label)
             m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
     except KeyError:
@@ -348,7 +354,7 @@ def ws_receive(message):
 
 
 
-    Group('m-' + chat_room_type + label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())}) # Group.send() will take care of sending this message to every reply_channel added to the group.
+    Group('m-' + room_type + label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())}) # Group.send() will take care of sending this message to every reply_channel added to the group.
 
 
 
@@ -360,27 +366,62 @@ def ws_disconnect(message):
 
     try:
         label = message.channel_session['room_label']
-        chat_room_type = message.channel_session['room_type']
+        room_type = message.channel_session['room_type']
 
-        print(chat_room_type +  "  " + label)
+        print(room_type +  "  " + label)
         print('Disconnecting...')
 
 
-        if chat_room_type == "topic":
+        if room_type == "topic":
             room = Topic.objects.get(label=label)
 
-        elif chat_room_type == "localchat":
+        elif room_type == "localchat":
             room = LocalChat.objects.get(label=label)
 
-        elif chat_room_type == "globalchat":
+        elif room_type == "globalchat":
             room = GlobalChat.objects.get(label=label)
 
 
 
 
-        Group('m-' + chat_room_type + label).discard(message.reply_channel)
+        Group('m-' + room_type + label).discard(message.reply_channel)
 
     except KeyError:
         pass
 
 '''
+
+# Group.send() will take care of sending this message to every reply_channel added to the group.
+
+
+
+
+'''
+
+Group("chat-%s-%s" % room_type, room_label).send({
+
+    "text": json.dumps({
+        "text": message["text"],
+        "username": message.channel_session["username"]
+    }),
+})
+
+'''
+
+'''
+  # Parse the query string
+
+  params = parse_qs(message.content["query_string"])
+  print("The query string is parsed: " + params)
+
+  if b"username" in params:
+      # Set the username in the session
+      message.channel_session["username"] = params[b"username"][0].decode("utf8")
+      # Add the user to the group
+
+      Group("chat-%s-%s" % room_type, room_label).add(message.reply_channel)
+  else:
+      # Close the connection
+      message.reply_channel({"close": True})
+
+  '''
