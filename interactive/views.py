@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Message
 from chats.models import Topic, LocalChat, GlobalChat, ChatGroup
-
+from django.contrib.auth.models import User
 
 import random
 import string
@@ -18,6 +18,8 @@ from django.shortcuts import render, redirect
 
 
 def chat_room(request, label, chat_room_type):
+
+
 
 
     '''
@@ -48,12 +50,17 @@ def chat_room(request, label, chat_room_type):
     # We want to show the last 50 messages, ordered most-recent-last
 
 
-
-
+    chatgroup = room.chatgroup.name
+    profile = request.user.profile
+    print("prpofile is here")
+    print(profile)
 
 
     return render(request, "interactive/room.html", {
+        'chatgroup': chatgroup,
+        'chat_room_type': chat_room_type,
         'room': room,
         'messages': messages,
+        'profile': profile,
     })
 

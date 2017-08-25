@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 from channels.sessions import channel_session
 from chats.models import Topic, LocalChat, GlobalChat
 from interactive.models import Message
+from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http
+from channels.asgi import get_channel_layer
 
 
 
@@ -21,7 +23,8 @@ from interactive.models import Message
 
 
 # Connected to websocket.connect
-
+#@channel_session_user_from_http
+@http_session_user
 @channel_session
 def ws_connect(message):
 
@@ -29,6 +32,9 @@ def ws_connect(message):
 
 
     print("The ws_add is called")
+  #  print(message.user.username)
+
+    print(message.user.id)
 
     list = message['path'].strip('/').split('/')
     print(list)
@@ -73,8 +79,19 @@ def ws_connect(message):
 
     print('Channel session - room type ' + message.channel_session['room_type'])
 
+
+
+    message.channel_session['message_user_id'] = message.user.id
+
+    print('Channel session - Message User ID ' + str(message.channel_session['message_user_id']))
+
+
+
+
     Group('m-' + room_type + room_label, channel_layer=message.channel_layer).add(message.reply_channel)
 
+
+    
 
     print("The execution of the ws_add is completed --------")
 
@@ -83,12 +100,18 @@ def ws_connect(message):
 
 
 # Connected to websocket.receive
+
 @channel_session
+@channel_session_user
 def ws_receive(message):
     # ASGI WebSocket packet-received and send-packet message type
     # both have a text ket fort ehri textual data
 
     print("The ws_message is called")
+    print("The user from the channels is down here")
+
+    message_user_id = message.channel_session['message_user_id']
+    print(str(message_user_id))
 
     room_type = message.channel_session['room_type']
     print(room_type + " received")
@@ -100,17 +123,17 @@ def ws_receive(message):
 
     if room_type == "topic":
         room = Topic.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))  # need to finish editing
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))  # need to finish editing
         print('the message is here')
         print(m)
 
     elif room_type == "localchat":
         room = LocalChat.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))
 
     elif room_type == "globalchat":
         room = GlobalChat.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=1))
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))
 
     Group('m-' + room_type + room_label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
 
@@ -127,7 +150,7 @@ def ws_receive(message):
 
 
 # Connected to websocket.disconnect
-
+@channel_session_user
 @channel_session
 def ws_disconnect(message):
     print("The ws_disconnect is called")

@@ -1,19 +1,434 @@
+{% extends "chats/base.html" %}
+
+{% block title %} {{chatgroup}} | {{chat_room_type}} | {{room.name}} {% endblock %}
+
+
+{% block head %} <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600,200' rel='stylesheet' type='text/css'>
+
+{% load static %}
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="row">
+	<div class="left_section col-md-3">
+
+			<div class="panel panel-default">
+
+				<div class="heading panel-heading">
+
+					<h4> Related </h4>
+					<h5>{{request.session.session_key}}</h5>
+					<h5><span class="local_chats_text">Local Chats</span> &nbsp <span>Topics</span></h5>
+
+				</div>
+
+				<!--
+				<div class="panel-body-adjusted panel-body">
+
+
+					<div class="local_chat">
+
+						<a class="pull-left">
+
+							<img class="img-circle" src="img/real.png" height="50px" width="50px">
+
+
+
+						</a>
+
+
+					<div class="local_chat_content">
+
+
+
+						<h5>Real Madrid
+
+						<span>
+						<span class="star glyphicon glyphicon-star">
+						</span>
+
+
+						<span class="number_of_favs"> 47K
+
+
+
+
+						</span>
+						</span>
+
+						</h5>
+
+					<div class="local_chat_message">
+
+						<a class="pull-left">
+
+						<img class="img-circle" src="" width="20px"
+						height="20px">
+
+
+
+
+						</a>
+
+						<p>Real Madrid defeated Valencia today!
+
+						<span class="heart glyphicon glyphicon-heart" > <span style="font-size: 12px" class="number_of_likes"> 420 </span> </span>
+
+
+						</p>
+
+
+						</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					</div>
+
+
+
+
+					</div>
+
+
+				</div>
+					-->
+
+
+
+
+
+
+			</div>
+
+
+		</div>
+
+
+		<div class="middle_section col-md-6">
+
+		<div class="panel_messages panel panel-default">
+
+				<div class="heading panel-heading">
+
+					<div class="chat_title">
+
+
+
+						<h4> <span class="local_chat_name">{{room.name}} <span>- {{chat_room_type}}</span>
+
+
+						</span>
+
+							<span class="right_icons">
+
+
+						<span class="glyphicon glyphicon-cog"></span>
+
+
+						<span class="glyphicon glyphicon-search"></span>
+
+
+						</span>
+
+
+						 </h4>
+
+						<h5>{{room.chatgroup.name}}</h5>
+
+
+
+
+
+					</div>
+
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+				<div class="messages_wrapper panel-body">
+
+
+
+
+
+					<div id="chat" class="chat_messages">
+
+					{% for message in messages %}
+
+
+					<div class="msg">
+
+					<a class="pull-left">
+
+
+						<img class="img-circle" src="" height="40px" width="40px" >
+
+					</a>
+
+					<h5>{{message.user.username}}
+
+
+					<span class="time">
+
+						{{message.formatted_timestamp}}
+
+
+					</span>
+
+
+
+					</h5>
+
+
+					<p class="msg_body">
+
+							{{message.text}}
+
+							<!--<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes"> 420 </span> </span> -->
+
+
+					</p>
+
+
+
+
+
+					</div>
+
+						<div style="clear:both"> </div>
+
+
+
+					{%endfor%}
+
+					</div>
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+			</div>
+
+			<div class="send_message">
+
+
+				<form id="chatform">
+
+				<div class="message_clip">
+
+
+					<input id="text" class="pull-left" type="text" name="send_message" placeholder="Message">
+					<button type="submit" id="go">Say it</button>
+
+
+					<span class="clip glyphicon glyphicon-paperclip"></span>
+
+					<div style="clear: both"> </div>
+
+
+
+
+
+				</div>
+
+
+
+
+				</form>
+
+
+
+
+
+
+			</div>
+
+
+
+		</div>
+
+		<div class="right_section col-md-3">
+
+		<div class="panel panel-default">
+
+				<div class="heading panel-heading">
+					<h4> Participants </h4>
+
+				</div>
+
+
+
+
+				<!--
+
+				<div class="participants panel-body">
+
+					<div class="participant">
+
+
+					<a class="pull-left">
+
+						<img class="img-circle" src="img/avatar.jpg" height="30px" width="30px">
+
+
+					</a>
+
+
+
+					<h5> Artur Begyan
+
+					</h5>
+
+					<hr>
+
+
+
+					</div>
+
+
+
+					<div class="participant">
+
+
+					<a class="pull-left">
+
+						<img class="img-circle" src="img/yury.jpg" height="30px" width="30px">
+
+
+					</a>
+
+
+
+					<h5> Yury Danielov
+
+					</h5>
+
+					<hr>
+
+
+
+					</div>
+
+
+					-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+
+
+
+			</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" src='{% static "interactive/jq.js" %}'></script>
+<script type="text/javascript" src='{% static "interactive/chat.js" %}'></script>
+
+
+
+{% endblock %}
+
+
+<!--
+      <tfoot>
+      <tr>
+        <td>Say something:</td>
+        <td colspan=2>
+          <input id="text" type="text" placeholder="message">
+          <button type="submit" id="go">Say it</button>
+        </td>
+      </tfoot>
+    </table>
+  </form>
+    </div>
+  </div>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Django Channels Example</title>
+  <title>{{chatgroup}} | {{chat_room_type}} | {{room.name}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600,200' rel='stylesheet' type='text/css'>
   {% load staticfiles %}
 
-  <!--
+
 
   <link rel="stylesheet" href="{% static 'interactive/normalize.css' %}">
   <link rel="stylesheet" href="{% static 'interactive/skeleton.css' %}">
   <link rel="stylesheet" href="{% static 'interactive/chat.css' %}">
 
-  -->
+
 
 
 </head>
@@ -32,7 +447,7 @@
     <input id="handle" type="text" placeholder="handle">
   </p>
 
-  -->
+
 
 
   <form id="chatform">
@@ -44,28 +459,21 @@
             <!--
             <td>{{ message.handle }}</td>
 
-            -->
+
             <td>{{ message.text }}</td>
           </tr>
         {% endfor %}
       </tbody>
-      <tfoot>
-      <tr>
-        <td>Say something:</td>
-        <td colspan=2>
-          <input id="text" type="text" placeholder="message">
-          <button type="submit" id="go">Say it</button>
-        </td>
-      </tfoot>
-    </table>
-  </form>
-    </div>
-  </div>  
+
+
+
+
+
   <script type="text/javascript" src='{% static "interactive/jq.js" %}'></script>
 
 
 
-  <!--<script type="text/javascript" src='{% static "interactive/reconnecting-websocket.min.js" %}'></script> -->
+  <!--<script type="text/javascript" src='{% static "interactive/reconnecting-websocket.min.js" %}'></script>
 
 
 
@@ -73,3 +481,10 @@
   <a href="https://github.com/jacobian/channels-example"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </body>
 </html>
+
+
+
+-->
+
+
+

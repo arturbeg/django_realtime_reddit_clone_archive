@@ -6,16 +6,80 @@ socket = new WebSocket("ws://" + window.location.host + window.location.pathname
 
 
 
+
+
 socket.onmessage = function(message) {
         event.preventDefault()
         var data = JSON.parse(message.data);
         console.log('the data has been parsed');
 
 
-         $('#chat').append('<tr>'
-        + '<td>' + data.user.username + '</td>'
-        + '<td>' + data.text + '</td>'
-        + '</tr>');
+         $('#chat').append(
+
+
+        '<div class="msg"> <a class="pull-left"> <img class="img-circle" src="" height="40px" width="40px" ></a> <h5>'
+         + data.user + '<span class="time">'+  data.timestamp + '</span></h5><p class="msg_body">'+ data.text + '</span></p></div><div style="clear:both"> </div>'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         );
+
+
+
+
+
+
+
+
+
+
+// continue when Javascript and JQuery are mastered
+
+
+
+
+
+
+
+
+         //$('#chat').append('<tr>'
+        //+ '<td>' + data.user.username + '</td>'
+        //+ '<td>' + data.text + '</td>'
+        //+ '</tr>');
         //var chat = $("#chat")
         //var ele = $('<tr></tr>')
 
@@ -42,6 +106,7 @@ socket.onmessage = function(message) {
         console.log("The button is pressed");
         var message = {
             text: $('#text').val(),
+
         }
 
 
