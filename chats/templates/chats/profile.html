@@ -10,6 +10,139 @@
 {% block content %}
 
 
+
+
+
+	<div class="row">
+
+		<div class="col-xs-1"> </div>
+
+		<div class="col-xs-10">
+
+			<img class="avatar img-circle" src="">
+			<h2 class="username"> {{object.user.username}}</h2>
+			<h4 class="user_describtion"> {{object.about}} </h4>
+
+
+
+
+		</div>
+
+
+		<div class="col-xs-1"> </div>
+
+
+
+		<div class="col-xs-12 col-md-6">
+
+			<div class="user_stats">
+
+					<span class="number">{{posts.count}}</span> <span>  posts</span>
+					<span class="number"> {{chatgroups_follwoing}} </span> <span>  chat groups</span>
+
+			</div>
+
+		</div>
+
+
+		<div class="col-xs-12 col-md-6">
+
+			<div class="user_stats">
+
+
+				<span class="number">{{object.get_number_of_followers}} </span> <span> followers</span>
+				<span class="number">{{object.get_number_of_following}} </span> <span> following</span>
+
+			</div>
+
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</div>
+
+
+
+	<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+			{% for post in posts %}
+			<div class="user_post">
+
+			<a class="pull-left">
+				<img class="img-circle" src="" height="30px" width="30px">
+
+			</a>
+
+			<div class="user_post_content">
+
+			<span class="username_small">{{post.message.user.username}}</span>
+
+			<span class="chat_name_small">{{post.message.chatgroup.name}}</span>
+
+			<span class="context">Context</span>
+
+			<p class="user_message">
+
+			{{post.message.text}}</p>
+
+
+			<div class="likes_comments">
+
+
+				<span class="heart glyphicon glyphicon-heart"> </span>
+				<span> {{post.message.get_number_of_likes}} </span>
+
+				<span class="comment_icon glyphicon glyphicon-comment">  </span>
+				<span>{{post.get_number_of_comments}}</span>
+
+
+				<span class="time_uploaded"> {{post.message.timestamp}} </span>
+				<hr>
+
+			</div>
+
+
+
+
+
+
+
+			</div>
+
+
+
+			</div>
+
+			{% endfor %}
+
+
+		</div>
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+
+<!--
+
 <img class="img-circle" src="{{object.avatar.url}}" height="200px">
 
 
@@ -22,7 +155,7 @@ The number of chatgroups following {{chatgroups_following}}  <hr>
 
 
 
-
+-->
 
 
 {% endblock %}

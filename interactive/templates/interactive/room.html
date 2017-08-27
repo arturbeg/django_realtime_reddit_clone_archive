@@ -21,13 +21,15 @@
 				<div class="heading panel-heading">
 
 					<h4> Related </h4>
-					<h5>{{request.session.session_key}}</h5>
+
 					<h5><span class="local_chats_text">Local Chats</span> &nbsp <span>Topics</span></h5>
 
 				</div>
 
-				<!--
+
 				<div class="panel-body-adjusted panel-body">
+
+					{% for localchat in localchats %}
 
 
 					<div class="local_chat">
@@ -45,14 +47,14 @@
 
 
 
-						<h5>Real Madrid
+						<h5>{{localchat.name}}
 
 						<span>
 						<span class="star glyphicon glyphicon-star">
 						</span>
 
 
-						<span class="number_of_favs"> 47K
+						<span class="number_of_favs"> {{localchat.get_number_of_participants}}
 
 
 
@@ -74,12 +76,16 @@
 
 						</a>
 
-						<p>Real Madrid defeated Valencia today!
-
-						<span class="heart glyphicon glyphicon-heart" > <span style="font-size: 12px" class="number_of_likes"> 420 </span> </span>
+						<p>{{localchat.get_the_most_recent_message.text}}
 
 
-						</p>
+							<!--
+							<span class="heart glyphicon glyphicon-heart" > <span style="font-size: 12px" class="number_of_likes"> {{localchat.get_the_most_recent_message.get_number_of_likes}} </span> </span></p> -->
+
+
+
+
+
 
 
 						</div>
@@ -104,9 +110,11 @@
 
 					</div>
 
+					{%endfor%}
+
 
 				</div>
-					-->
+
 
 
 
@@ -148,7 +156,8 @@
 
 						 </h4>
 
-						<h5>{{room.chatgroup.name}}</h5>
+
+						 <h5>{{room.chatgroup.name}}</h5>
 
 
 
@@ -205,7 +214,10 @@
 
 					<p class="msg_body">
 
-							{{message.text}}
+							{{message.text}} <span> Likes: {{message.get_number_of_likes}}</span>
+
+						<span>     Dislikes: {{message.get_number_of_dislikes}}</span>
+
 
 							<!--<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes"> 420 </span> </span> -->
 

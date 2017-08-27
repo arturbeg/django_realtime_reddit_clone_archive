@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.views.static import serve
+from django.conf.urls.static import static
+
 
 urlpatterns = [
    url(r'^admin/', admin.site.urls),
    url(r'^', include('chats.urls')),
    url(r'^m/', include('interactive.urls')),
+   url(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+       })
 
 
 
@@ -34,4 +41,9 @@ urlpatterns = [
 
     
 ]
+
+
+
+
+#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

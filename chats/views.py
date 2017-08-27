@@ -21,6 +21,7 @@ class ProfileDetail(DetailView):
     template_name = 'chats/profile.html'
 
     def get_context_data(self, **kwargs):
+        print("Updating the get_context_data method")
         data = super(ProfileDetail, self).get_context_data(**kwargs)
         self.object = self.get_object()
         print(self.object.user.id)
@@ -29,9 +30,21 @@ class ProfileDetail(DetailView):
         print(chatgroups)
         chatgroups_following = chatgroups.count()
         print('User ' + self.object.user.username + ' follows ' + str(chatgroups_following) + ' chats')
-        data['chatgroups_following'] = chatgroups_following
+        data['chatgroups_following'] = str(chatgroups_following)
 
 
+        posts = []
+        messages = self.object.user.message_set.all()
+       # print(messages)
+
+        for message in messages:
+            if message.has_related_post():
+                new_post = message.post
+                posts.append(new_post)
+        print("the list of posts is here")
+        print(posts)
+
+        data['posts'] = posts
 
         return data
 

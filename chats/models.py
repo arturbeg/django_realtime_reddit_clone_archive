@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.conf import settings
 from datetime import datetime
 from django.urls import reverse
+#from interactive.models import Message
 
 
 
@@ -50,7 +51,7 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(User, related_name="is_member")
     timestamp = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(upload_to="group_avatar", blank=True)
-    label = models.SlugField(unique=True)
+    #label = models.SlugField(unique=True)
 
 
     def __str__(self):
@@ -101,6 +102,26 @@ class LocalChat(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     participants = models.ManyToManyField(User, related_name="is_participant")
     label = models.SlugField(unique=True)
+
+
+    def get_number_of_participants(self):
+        return self.participants.count()
+
+
+    def get_the_most_recent_message(self):
+
+        list_of_messages = self.localchat_messages.order_by('-timestamp')[:1]
+
+        if len(list_of_messages) == 0:
+            print("There is no messages in the local chat")
+
+
+        else:
+            top_message = list_of_messages[0]
+            print(top_message.text)
+
+        return top_message
+
 
     def __str__(self):
         return self.name

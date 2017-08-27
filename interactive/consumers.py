@@ -91,8 +91,10 @@ def ws_connect(message):
     Group('m-' + room_type + room_label, channel_layer=message.channel_layer).add(message.reply_channel)
 
 
-    
+   # length = Group('m-' + room_type + room_label).channel_layer.group_channels('m-' + room_type + room_label)
 
+
+   # print(length)
     print("The execution of the ws_add is completed --------")
 
 
