@@ -1,6 +1,8 @@
 from django.db import models
 from chats.models import ChatGroup, LocalChat, Topic, GlobalChat
 from django.conf import settings
+from django.urls import reverse
+from django.db.models.signals import post_save
 
 
 User = settings.AUTH_USER_MODEL
@@ -29,8 +31,16 @@ class Message(models.Model):
     def formatted_timestamp(self):
         return self.timestamp.strftime('%b %-d %-I:%M %p')
 
-    def as_dict(self):
-        return {'user': self.user.username, 'text': self.text, 'timestamp': self.formatted_timestamp}
+    def get_absolute_url_room(self): # get the absolute url of the room the message is in
+        if self.globalchat:
+            return reverse("chatroom", kwargs={'chat_room_type': "globalchat", 'label': self.globalchat.label })
+        elif self.topic:
+            return reverse("chatroom", kwargs={'chat_room_type': "topic", 'label': self.topic.label})
+
+        elif self.localchat:
+            return reverse("chatroom", kwargs={'chat_room_type': "localchat", 'label': self.localchat.label})
+
+
 
 
     def get_number_of_likes(self):
@@ -42,6 +52,14 @@ class Message(models.Model):
 
     def has_related_post(self):
         return hasattr(self, 'post')
+
+    def get_url_for_avatar_of_message_sender(self):
+        return reverse("media", kwargs={'path': self.user.profile.avatar})
+
+    def as_dict(self):
+        return {'user': self.user.username, 'text': self.text, 'timestamp': self.formatted_timestamp, 'profile_avatar': self.get_url_for_avatar_of_message_sender()}
+
+
 
 
 

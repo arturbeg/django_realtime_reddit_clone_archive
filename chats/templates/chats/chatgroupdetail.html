@@ -2,12 +2,219 @@
 
 
 
-{% block title %} Create a new ChatGroup {% endblock %}
+{% block title %} {{object.name}} {% endblock %}
 
 
 
 
 {% block content %}
+
+
+
+
+
+  <div class="row">
+
+    <div class="col-xs-1"> </div>
+
+
+    <div class="col-xs-10">
+
+
+    <div class="c-g-i">
+
+
+      <div class="pull-left">
+
+      <img class="img-circle" src="http://127.0.0.1:8000/media/group_avatar/football.png">
+
+
+      </div>
+
+      <div class="info">
+
+
+      <div class="main-info">
+
+      <h4> {{object.name}}
+
+      <button class="follow-btn-big btn"> Follow </button>
+
+
+
+
+      </h4>
+
+      <button class="follow-btn btn"> Follow </button>
+
+
+
+
+
+      </div>
+
+      <div class="clear"> </div>
+
+      <div class="other-info">
+
+        <div class="group-stats">
+
+        <span class="followers"> <span> {{object.members.count}} </span> followers </span>
+        <span class="local-chats"> <span> {{object.localchat_set.count}} </span> local chats </span>
+        <span class="topics"> <span> {{object.topic_set.count}} </span> topics </span>
+
+        </div>
+
+
+        <div class="group-about">
+          <p>
+
+
+            {{object.about}}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="clear-medium"> </div>
+      </div>
+
+
+
+
+    </div>
+    </div>
+
+
+    <div class="col-xs-1"> </div>
+
+
+
+  </div>
+
+
+<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+
+            {% for topic in topics%}
+			<div class="trending_post">
+
+
+
+			<!--<span class="arrow_trending_up pull-left glyphicon glyphicon-arrow-up"></span> -->
+
+
+
+
+				<div class="trending_post_content">
+
+				<div>
+
+					<a class="pull-left">
+
+						<img class="trending_logo img-rounded" src="{{topic.get_absolute_url_for_avatar}}">
+
+					</a>
+
+					<div class="trending_post_name">
+
+					<strong>
+
+						<a href="{{topic.get_absolute_url}}"> Topic  {{topic.name}}   about  {{topic.about}} </a>
+
+ 					</strong>
+
+ 					</div>
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+					<div style="clear: both"> </div>
+
+					<div class="trending_top_message">
+
+						<a class="pull-left">
+
+ 						<img class="img-circle" src="{{topic.get_the_most_recent_message.get_url_for_avatar_of_message_sender}}" height="30px" width="30px">
+
+
+
+ 						</a>
+
+ 						<p class="message_content"> {{topic.get_the_most_recent_message.text}}
+
+
+
+
+
+ 							<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes"> 420 </span> </span>
+
+
+
+
+
+
+ 						</p>
+
+
+
+
+
+
+					</div>
+
+
+				</div>
+
+			<!--	<span class="arrow_trending_down pull-right  glyphicon glyphicon-arrow-down"></span> -->
+
+
+
+
+				<div style="clear: both"> </div>
+			</div>
+
+            {% endfor %}
+			<div style="clear: both"> </div>
+
+
+
+
+		</div>
+
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+
+<!--
 
 
 
@@ -71,8 +278,7 @@ Is following
 
 {% endif %}
 
-{% endblock %}
 
 
 
-
+-->

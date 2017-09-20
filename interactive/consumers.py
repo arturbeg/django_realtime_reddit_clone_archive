@@ -86,6 +86,11 @@ def ws_connect(message):
     print('Channel session - Message User ID ' + str(message.channel_session['message_user_id']))
 
 
+    message.channel_session['message_user_avatar_url'] = message.user.profile.get_absolute_url_for_avatar()
+
+    print('Channel session - Message user avatar path' + str(message.channel_session['message_user_avatar_url']))
+
+
 
 
     Group('m-' + room_type + room_label, channel_layer=message.channel_layer).add(message.reply_channel)
@@ -125,17 +130,17 @@ def ws_receive(message):
 
     if room_type == "topic":
         room = Topic.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))  # need to finish editing
+        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id), chatgroup=room.chatgroup)  # need to finish editing
         print('the message is here')
         print(m)
 
     elif room_type == "localchat":
         room = LocalChat.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))
+        m = room.localchat_messages.create(text=data['text'], user=User.objects.get(id=message_user_id), chatgroup=room.chatgroup)
 
     elif room_type == "globalchat":
         room = GlobalChat.objects.get(label=room_label)
-        m = room.topic_messages.create(text=data['text'], user=User.objects.get(id=message_user_id))
+        m = room.globalchat_messages.create(text=data['text'], user=User.objects.get(id=message_user_id), chatgroup=room.chatgroup)
 
     Group('m-' + room_type + room_label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
 

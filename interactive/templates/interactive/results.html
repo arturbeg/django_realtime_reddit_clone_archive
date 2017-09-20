@@ -1,0 +1,149 @@
+
+
+{% if is_localchat %}
+
+
+{% for localchat in results %}
+
+
+
+<div class="local_chat">
+
+							<a class="pull-left">
+
+								<img class="img-circle" src="{{localchat.get_absolute_url_for_avatar}}" height="50px" width="50px">
+
+
+
+							</a>
+
+
+							<div class="local_chat_content">
+
+
+
+								<h5> <a href="{{localchat.get_absolute_url}}"> {{localchat.name}} </a>
+
+								<span>
+								<span class="star glyphicon glyphicon-star">
+								</span>
+
+
+								<span class="number_of_favs"> {{localchat.get_number_of_participants}}
+
+
+								</span>
+								</span>
+
+								</h5>
+
+								<div class="local_chat_message">
+
+									<a class="pull-left">
+
+									<img class="img-circle" src="http://127.0.0.1:8000/media/profile_avatar/avatar.jpg" width="20px"
+									height="20px">
+
+
+
+
+									</a>
+
+									<p>{{localchat.get_the_most_recent_message.text}}
+
+
+
+								</div>
+
+
+
+
+
+							</div>
+
+
+
+
+</div>
+
+{% endfor %}
+
+
+{% else %}
+
+
+{% for topic in results %}
+
+
+						<div class="local_chat">
+
+							<a class="pull-left">
+
+								<img class="img-circle" src="{{topic.get_absolute_url_for_avatar}}" height="50px" width="50px">
+
+
+
+							</a>
+
+
+							<div class="local_chat_content">
+
+
+
+								<h5> <a href="{{topic.get_absolute_url}}"> {{topic.name}} </a>
+
+								<span>
+								<span class="star glyphicon glyphicon-star">
+								</span>
+
+
+
+								</span>
+
+								</h5>
+
+								<div class="local_chat_message">
+
+									<a class="pull-left">
+
+									<img class="img-circle" src="http://127.0.0.1:8000/media/profile_avatar/avatar.jpg" width="20px"
+									height="20px">
+
+
+
+
+									</a>
+
+									<p>{{topic.get_the_most_recent_message.text}}
+
+
+								<!--
+								<span class="heart glyphicon glyphicon-heart" > <span style="font-size: 12px" class="number_of_likes"> {{localchat.get_the_most_recent_message.get_number_of_likes}} </span> </span></p> -->
+
+
+								</div>
+
+
+
+
+
+							</div>
+
+
+
+
+						</div>
+
+
+
+{% endfor %}
+
+
+
+
+
+{% endif %}
+
+
+
+

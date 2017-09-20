@@ -1,0 +1,38 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Profile Followers {% endblock %}
+
+
+
+
+{% block content%}
+
+
+
+
+{% for user in followers %}
+
+
+{{ user.username}} </br>
+
+
+
+
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+

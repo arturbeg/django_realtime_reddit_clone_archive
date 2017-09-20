@@ -1,11 +1,10 @@
 from django.db import models
-#from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from datetime import datetime
 from django.urls import reverse
-#from interactive.models import Message
+import interactive
 
 
 
@@ -18,8 +17,6 @@ class Profile(models.Model):
     about = models.CharField(max_length=200, blank=True)
     avatar = models.ImageField(upload_to="profile_avatar", blank=True)
 
-
-  #  following = models.ManyToManyField(User, related_name="following")
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -33,6 +30,35 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'pk': self.pk})
+
+    def get_absolute_url_for_avatar(self):
+        print(self.avatar is None)
+        if not self.avatar:
+            print("This user has not provided an avatar")
+            return reverse("media", kwargs={'path': "profile_avatar/default-avatar.png"})
+
+        else:
+            return  reverse("media", kwargs={'path': self.avatar})
+
+
+
+    def get_absolute_url_followers(self):
+
+        return reverse("profile-followers", kwargs={'pk': self.pk})
+
+
+    def get_absolute_url_following(self):
+        return reverse("profile-following", kwargs={'pk': self.pk})
+
+    def get_absolute_url_chatgroups(self):
+
+        return reverse("profile-chatgroups", kwargs={'pk': self.pk})
+
+
+
 
 
 
@@ -51,14 +77,22 @@ class ChatGroup(models.Model):
     members = models.ManyToManyField(User, related_name="is_member")
     timestamp = models.DateTimeField(auto_now_add=True)
     avatar = models.ImageField(upload_to="group_avatar", blank=True)
-    #label = models.SlugField(unique=True)
+
+
+    def get_absolute_url_for_avatar(self):
+        return reverse("media", kwargs={'path': self.avatar})
+
+
+
+    def get_owner(self):
+        return self.owner
 
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('chatgroup', kwargs={'pk': self.pk})
+        return reverse('chatgroup-detail', kwargs={'pk': self.pk})
 
 
 
@@ -80,9 +114,46 @@ class Topic(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     label = models.SlugField(unique=True)
 
+    def get_name(self):
+        return self.name
+
+
+    def get_owner(self):
+        return self.owner.id
+
+
+    def get_chatgroup_owner(self):
+        return self.chatgroup.owner
+
 
     def __str__(self):
         return self.name
+
+
+    def get_room_type(self):
+        return "Topic"
+
+    def get_absolute_url(self):
+        return reverse('chatroom', kwargs={'chat_room_type': 'topic', "label": self.label})
+
+
+    def get_the_most_recent_message(self):
+
+        list_of_messages = self.topic_messages.order_by('-timestamp')[:1]
+
+        if len(list_of_messages) == 0:
+            print("There is no messages in the local chat")
+            top_message = interactive.models.Message.objects.get(pk=180)
+
+
+        else:
+            top_message = list_of_messages[0]
+            print(top_message.text)
+
+        return top_message
+
+    def get_absolute_url_for_avatar(self):
+        return reverse("media", kwargs={'path': self.avatar})
 
 
 
@@ -104,6 +175,22 @@ class LocalChat(models.Model):
     label = models.SlugField(unique=True)
 
 
+    def get_name(self):
+        return self.name
+
+    def get_owner(self):
+        return self.chatgroup.owner.id
+
+    def get_room_type(self):
+        return "Local Chat"
+
+    def get_absolute_url_for_avatar(self):
+        return reverse("media", kwargs={'path': self.avatar})
+
+    def get_absolute_url(self):
+        return reverse('chatroom', kwargs={'chat_room_type': 'localchat', "label": self.label})
+
+
     def get_number_of_participants(self):
         return self.participants.count()
 
@@ -114,6 +201,7 @@ class LocalChat(models.Model):
 
         if len(list_of_messages) == 0:
             print("There is no messages in the local chat")
+            top_message = interactive.models.Message.objects.get(pk=180)
 
 
         else:
@@ -130,56 +218,51 @@ class LocalChat(models.Model):
 
 class GlobalChat(models.Model):
     chatgroup = models.OneToOneField(ChatGroup, on_delete=models.CASCADE) # the parent chat group -> one to one relationship
-    #label = models.SlugField(unique=True)
+    label = models.SlugField(unique=True)
+
+    def get_name(self):
+        return self.chatgroup.name
+
+    def get_owner(self):
+        return self.chatgroup.owner.id
+
+    def get_room_type(self):
+        return "Global Chat"
+
+    def get_absolute_url_for_avatar(self):
+        return reverse("media", kwargs={'path': self.chatgroup.avatar}) # Uses the same avatar as the chatgroup it belongs to
 
 
     def __str__(self):
         return self.chatgroup.name
 
 
+    def get_globalchat_name(self):
+        return self.chatgroup.name
 
-def post_save_user_receiver(sender, instance, created, *args, **kwargs): # check if it is working/more research on signals
+    def get_absolute_url(self):
+        return reverse('chatroom', kwargs={'chat_room_type': 'globalchat', "label": self.label})
+
+    def get_the_most_recent_message(self):
+
+        list_of_messages = self.globalchat_messages.order_by('-timestamp')[:1]
+
+        if len(list_of_messages) == 0:
+            print("There is no messages in the local chat")
+            top_message = interactive.models.Message.objects.get(pk=180)
+
+
+        else:
+            top_message = list_of_messages[0]
+            print(top_message.text)
+
+        return top_message
+
+
+
+def post_save_chatgroup_receiver(sender, instance, created, *args, **kwargs): # check if it is working/more research on signals
     if created:
-        globalchat, is_created = GlobalChat.objects.get_or_create(chatgroup=instance)
+        globalchat, is_created = GlobalChat.objects.get_or_create(chatgroup=instance, label=instance.name)
 
-post_save.connect(post_save_user_receiver, sender=ChatGroup)
-
-
-'''
-
-
-
-class Message(models.Model):
-    text = models.TextField()
-    user = models.ForeignKey(User)
-    chatgroup = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-    globalchat = models.ForeignKey(GlobalChat, on_delete=models.CASCADE, blank=True, null=True)
-    localchat = models.ForeignKey(LocalChat, on_delete=models.CASCADE, blank=True, null=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
-'''
-
-#class ChatGroupMembership(models.Model):
- #   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  #  chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-   # date_established = models.DateTimeField(default=datetime.now, blank=True)
-
-
-
-#class LocalChatMembership(models.Model):
- #   user = models.ForeignKey(User, on_delete=models.CASCADE)
-  #  local_chat = models.ForeignKey(LocalChat, on_delete=models.CASCADE)
-   # date_joined = models.DateTimeField()
-
-
-
-
-    # class ChatGroupMembership(models.Model):
-    #   user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #  chat_group = models.ForeignKey(ChatGroup, on_delete=models.CASCADE)
-    # date_established = models.DateTimeField(default=datetime.now, blank=True)
-
-
+post_save.connect(post_save_chatgroup_receiver, sender=ChatGroup)
 

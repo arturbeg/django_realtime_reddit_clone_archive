@@ -10,17 +10,179 @@
 {% block content %}
 
 
+	<div class="row">
 
-<h1> Trending Topics </h1>
-
-
-<ul>
+		<div class="col-xs-1">
 
 
-{% for topic in object_list %}
 
 
-    <h2> Topic number {{topic.id}}</h2>
+		 </div>
+		<div class="col-xs-10">
+
+		<div class="selection">
+
+		<a href="{% url "trending-globalchats" %}"> <span class="select1">Global Chats</span></a>
+		<a href="{% url "trending-topics" %}"><span class="select2">Topics</span> </a>
+		<a href="{% url "trending-localchats" %}"><span class="select3">Local Chats</span> </a>
+		</div>
+
+		</div>
+
+
+
+
+
+
+
+		<div class="col-xs-1"> </div>
+
+	</div>
+
+
+	<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+
+            {% for topic in object_list%}
+			<div class="trending_post">
+
+
+
+			<!--<span class="arrow_trending_up pull-left glyphicon glyphicon-arrow-up"></span> -->
+
+
+
+
+				<div class="trending_post_content">
+
+				<div>
+
+					<a class="pull-left">
+
+						<img class="trending_logo img-rounded" src="{{topic.get_absolute_url_for_avatar}}">
+
+					</a>
+
+					<div class="trending_post_name">
+
+					<strong>
+
+						<a href="{{topic.get_absolute_url}}"> Topic  {{topic.name}}   about  {{topic.about}} </a>
+
+ 					</strong>
+
+ 					</div>
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+					<div style="clear: both"> </div>
+
+					<div class="trending_top_message">
+
+						<a class="pull-left">
+
+ 						<img class="img-circle" src="{{topic.get_the_most_recent_message.get_url_for_avatar_of_message_sender}}" height="30px" width="30px">
+
+
+
+ 						</a>
+
+ 						<p class="message_content">
+
+
+							{% if topic.message_set.count == 0  %}
+
+
+							There are no messages in this chatroom
+
+							{% else %}
+
+
+							{{topic.get_the_most_recent_message.text}}
+
+
+							{% endif %}
+
+
+
+
+ 							<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes">
+
+								420
+
+							<!--{{topic.get_the_most_recent_message.likers.count}} -->
+
+							</span> </span>
+
+
+
+
+
+
+ 						</p>
+
+
+
+
+
+
+					</div>
+
+
+				</div>
+
+			<!--	<span class="arrow_trending_down pull-right  glyphicon glyphicon-arrow-down"></span> -->
+
+
+
+
+				<div style="clear: both"> </div>
+			</div>
+
+            {% endfor %}
+			<div style="clear: both"> </div>
+
+
+
+
+		</div>
+
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+<!--
+  <h2> Topic number {{topic.id}}</h2>
 
 
     The name of the Topic  <strong>{{topic.name }} </strong><hr>
@@ -35,19 +197,4 @@
 
 
 
-
-
-{%endfor%}
-
-
-
-
-
-</ul>
-
-
-{% endblock %}
-
-
-
-
+-->

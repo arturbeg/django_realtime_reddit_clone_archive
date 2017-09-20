@@ -1,0 +1,197 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Trending localchats {% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+	<div class="row">
+
+		<div class="col-xs-1">
+
+
+
+
+		 </div>
+		<div class="col-xs-10">
+
+		<div class="selection">
+
+		<a href="{% url "trending-globalchats" %}"> <span class="select2">Global Chats</span></a>
+		<a href="{% url "trending-topics" %}"><span class="select1">Topics</span> </a>
+		<a href="{% url "trending-localchats" %}"><span class="select3">Local Chats</span> </a>
+		</div>
+
+		</div>
+
+
+
+
+
+
+
+		<div class="col-xs-1"> </div>
+
+	</div>
+
+
+	<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+
+            {% for globalchat in object_list%}
+			<div class="trending_post">
+
+
+
+			<!--<span class="arrow_trending_up pull-left glyphicon glyphicon-arrow-up"></span> -->
+
+
+
+
+				<div class="trending_post_content">
+
+				<div>
+
+					<a class="pull-left">
+
+						<img class="trending_logo img-rounded" src="http://127.0.0.1:8000/media/group_avatar/football.png">
+
+					</a>
+
+					<div class="trending_post_name">
+
+					<strong>
+
+						<a href="{{globalchat.get_absolute_url}}">GlobalChat   {{globalchat.chatgroup.name}}   about  {{globalchat.chatgroup.about}} </a>
+
+ 					</strong>
+
+ 					</div>
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+					<div style="clear: both"> </div>
+
+					<div class="trending_top_message">
+
+						<a class="pull-left">
+
+ 						<img class="img-circle" src="http://127.0.0.1:8000/media/group_avatar/test.jpg" height="30px" width="30px">
+
+
+
+ 						</a>
+
+ 						<p class="message_content"> {{globalchat.get_the_most_recent_message.text}}
+
+
+
+
+
+ 							<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes"> 420 </span> </span>
+
+
+
+
+
+
+ 						</p>
+
+
+
+
+
+
+					</div>
+
+
+				</div>
+
+				<!--<span class="arrow_trending_down pull-right  glyphicon glyphicon-arrow-down"></span> -->
+
+
+
+
+				<div style="clear: both"> </div>
+			</div>
+
+            {% endfor %}
+			<div style="clear: both"> </div>
+
+
+
+
+		</div>
+
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+<!--
+
+<h1> Trending localchats </h1>
+
+
+<ul>
+
+
+{% for localchat in object_list %}
+
+
+    <h2> localchat number {{localchat.id}}</h2>
+
+
+    The name of the localchat  <strong>{{localchat.name }} </strong><hr>
+    What the localchat is about <strong> {{localchat.about }}</strong> <hr>
+
+    Chatgroup {{localchat.chatgroup}}<hr>
+
+
+
+    What the chatgroup is about ---- {{localchat.chatgroup.about}}
+
+
+
+
+
+
+{%endfor%}
+
+
+
+
+
+</ul>
+
+-->

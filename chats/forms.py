@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django import forms
-from django.forms import ModelForm, TextInput, PasswordInput
+from django.forms import ModelForm, TextInput, PasswordInput, CheckboxInput, FileInput
 from .models import ChatGroup, Topic, LocalChat, Profile
 from django.core.files.images import get_image_dimensions
 
@@ -41,9 +41,25 @@ class TopicCreateForm(forms.ModelForm):
 
         fields = ['chatgroup', 'name', 'about', 'is_hidden', 'is_private', 'avatar']
 
+        widgets = {
+            'name': TextInput(attrs={'placeholder': 'Enter Name', 'class': 'form-control'}),
+            'about': TextInput(attrs={'placeholder': 'Enter About', 'class': 'form-control'}),
+            'is_hidden': CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_private': CheckboxInput(attrs={'class': 'form-check-input'}),
+            'avatar': FileInput(attrs={'class': 'form-control-file'}),
+
+
+        }
 
 
 
+
+
+class TopicUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Topic
+
+        fields = ['name', 'about', 'is_hidden', 'is_private', 'avatar']
 
 
 

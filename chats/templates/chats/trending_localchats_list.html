@@ -11,6 +11,155 @@
 
 
 
+	<div class="row">
+
+		<div class="col-xs-1">
+
+
+
+
+		 </div>
+		<div class="col-xs-10">
+
+		<div class="selection">
+
+		<a href="{% url "trending-globalchats" %}"> <span class="select3">Global Chats</span></a>
+		<a href="{% url "trending-topics" %}"><span class="select1">Topics</span> </a>
+		<a href="{% url "trending-localchats" %}"><span class="select2">Local Chats</span> </a>
+		</div>
+
+		</div>
+
+
+
+
+
+
+
+		<div class="col-xs-1"> </div>
+
+	</div>
+
+
+	<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+
+            {% for localchat in object_list%}
+			<div class="trending_post">
+
+
+
+		<!--	<span class="arrow_trending_up pull-left glyphicon glyphicon-arrow-up"></span> -->
+
+
+
+
+				<div class="trending_post_content">
+
+				<div>
+
+					<a class="pull-left">
+
+						<img class="trending_logo img-rounded" src="{{localchat.get_absolute_url_for_avatar}}">
+
+					</a>
+
+					<div class="trending_post_name">
+
+					<strong>
+
+						<a href="{{localchat.get_absolute_url}}">LocalChat   {{localchat.name}}   about  {{localchat.about}}</a>
+
+ 					</strong>
+
+ 					</div>
+
+
+
+
+
+
+
+
+
+				</div>
+
+
+
+
+					<div style="clear: both"> </div>
+
+					<div class="trending_top_message">
+
+						<a class="pull-left">
+
+ 						<img class="img-circle" src="{{localchat.get_the_most_recent_message.get_url_for_avatar_of_message_sender}}" height="30px" width="30px">
+
+
+
+ 						</a>
+
+ 						<p class="message_content"> {{localchat.get_the_most_recent_message.text}}
+
+
+
+
+
+ 							<span class="heart glyphicon glyphicon-heart"> <span class="number_of_likes"> 420 </span> </span>
+
+
+
+
+
+
+ 						</p>
+
+
+
+
+
+
+					</div>
+
+
+				</div>
+
+				<!--<span class="arrow_trending_down pull-right  glyphicon glyphicon-arrow-down"></span> -->
+
+
+
+
+				<div style="clear: both"> </div>
+			</div>
+
+            {% endfor %}
+			<div style="clear: both"> </div>
+
+
+
+
+		</div>
+
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+
+{% endblock %}
+
+
+
+<!--
+
 <h1> Trending localchats </h1>
 
 
@@ -45,9 +194,4 @@
 
 </ul>
 
-
-{% endblock %}
-
-
-
-
+-->

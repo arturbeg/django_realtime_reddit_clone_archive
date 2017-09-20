@@ -1,0 +1,107 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} Recent Activity {% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+
+
+
+
+	<div class="row">
+		<div class="col-xs-1"> </div>
+
+
+		<div class="col-xs-10">
+
+			{% for post in object_list %}
+			<div class="user_post">
+
+			<a class="pull-left">
+				<img class="img-circle" src="http://127.0.0.1:8000/media/profile_avatar/avatar.jpg" height="30px" width="30px">
+
+			</a>
+
+			<div class="user_post_content">
+
+			<span class="username_small">{{post.message.user.username}}</span>
+
+			<span class="chat_name_small">{{post.message.chatgroup.name}}</span>
+
+			<span class="context">Context</span>
+
+			<p class="user_message">
+
+			{{post.message.text}}</p>
+
+
+			<div class="likes_comments">
+
+
+				<span class="heart glyphicon glyphicon-heart"> </span>
+				<span> {{post.message.get_number_of_likes}} </span>
+
+				<span class="comment_icon glyphicon glyphicon-comment">  </span>
+				<span>{{post.get_number_of_comments}}</span>
+
+
+				<span class="time_uploaded"> {{post.message.timestamp}} </span>
+				<hr>
+
+			</div>
+
+
+
+
+
+
+
+			</div>
+
+
+
+			</div>
+
+			{% endfor %}
+
+
+		</div>
+		<div class="col-xs-1"> </div>
+
+
+	</div>
+
+
+
+
+
+
+<!--
+
+<img class="img-circle" src="{{object.avatar.url}}" height="200px">
+
+
+
+Username: {{object.user.username}} <hr>
+About the user: {{object.about}} <hr>
+The number of followers {{object.get_number_of_followers}} <hr>
+The number of following {{object.get_number_of_following}} <hr>
+The number of chatgroups following {{chatgroups_following}}  <hr>
+
+
+
+-->
+
+
+{% endblock %}
+
+
+
+

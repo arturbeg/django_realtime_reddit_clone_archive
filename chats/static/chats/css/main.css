@@ -1,3 +1,7 @@
+a {
+    text-decoration: none;
+}
+
 .follow_button {
   background-color: rgba(0,0,0,1);
   color: white;
@@ -273,7 +277,7 @@ and (min-width : 768px) {
 
   margin-top: 50px;
   max-width: 830px;
-  background-color: grey;
+
  
   max-height: 114px;
   margin-left: auto;

@@ -26,7 +26,12 @@ urlpatterns = [
    url(r'^m/', include('interactive.urls')),
    url(r'^media/(?P<path>.*)$', serve, {
             'document_root': settings.MEDIA_ROOT,
-       })
+       }, name="media"),
+
+
+
+
+    url(r'^accounts/', include('allauth.urls')),
 
 
 

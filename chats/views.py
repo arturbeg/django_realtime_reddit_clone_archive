@@ -11,10 +11,57 @@ from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Profile, ChatGroup, Topic, LocalChat
+from .models import Profile, ChatGroup, Topic, LocalChat, GlobalChat
 from django.http import Http404
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
+from interactive.models import Post
+import operator
+from django.db.models import Q
+
+from functools import reduce
+
+
+
+
+
+
+
+def chargroup_search_list(request):
+    template = 'chats/chatgroup_search.html'
+    queryset = ChatGroup.objects.all()
+
+    query = request.GET.get('q')
+    if query:
+        result = queryset.filter(
+
+            Q(name__icontains=query) |
+            Q(about__icontains=query)
+
+        )
+
+
+
+
+
+
+    context = {"objects": result}
+    return render(request, template, context)
+
+
+
+
+
+
+
+
+'''class ChatgroupSearchList(ListView):
+
+    model = ChatGroup
+    template = 'chats/chatgroup_search.html'''
+
+
+
 
 class ProfileDetail(DetailView):
     model = Profile
@@ -27,21 +74,14 @@ class ProfileDetail(DetailView):
         print(self.object.user.id)
 
         chatgroups = ChatGroup.objects.filter(members__id=self.object.user.id)
+
         print(chatgroups)
-        chatgroups_following = chatgroups.count()
-        print('User ' + self.object.user.username + ' follows ' + str(chatgroups_following) + ' chats')
-        data['chatgroups_following'] = str(chatgroups_following)
+
+        data['chatgroups'] = chatgroups
 
 
-        posts = []
-        messages = self.object.user.message_set.all()
-       # print(messages)
 
-        for message in messages:
-            if message.has_related_post():
-                new_post = message.post
-                posts.append(new_post)
-        print("the list of posts is here")
+        posts = Post.objects.filter(message__user__id = self.object.user.id)
         print(posts)
 
         data['posts'] = posts
@@ -78,6 +118,11 @@ class ChatGroupDetailView(FormMixin, DetailView):
 
         data['is_owner'] = is_owner
 
+
+        chatgroup_topics = Topic.objects.filter(chatgroup__id = self.object.id)
+
+        data['topics'] = chatgroup_topics
+
         return data
 
     def form_valid(self, form):
@@ -93,6 +138,94 @@ class TrendingLocalChatsList(ListView):
     model = LocalChat
     template_name = 'chats/trending_localchats_list.html'
 
+
+    def get_queryset(self):
+
+        if self.request.user.is_authenticated:
+
+            queryset = LocalChat.objects.all()
+            print(queryset)
+            chatgroups_followed = self.request.user.is_member.all()
+            print(chatgroups_followed)
+
+            for localchat in queryset:
+                print(localchat)
+                chatgroups_counter = chatgroups_followed.count()
+
+                for chatgroup in chatgroups_followed:
+                    if localchat not in chatgroup.localchat_set.all():
+                        chatgroups_counter -= 1
+                print(chatgroups_counter)
+
+                if chatgroups_counter == 0:
+                    queryset = queryset.exclude(name = localchat.name)
+
+
+        else:
+            print("The user is not authenticated")
+            queryset = LocalChat.objects.all()
+
+
+        print(queryset)
+
+
+
+
+
+
+
+
+        return queryset
+
+
+
+def profile_followers(request, pk, *args, **kwargs):
+    template_name = "chats/profile_followers.html"
+    profile = Profile.objects.get(pk=pk)
+    print(profile.user.username)
+
+    queryset = profile.followers.all()
+    print(queryset)
+
+    c = {"followers" : queryset}
+    return render(request, template_name, c)
+
+
+
+
+def profile_following(request, pk, *args, **kwargs):
+    template_name = "chats/profile_following.html"
+    profile = Profile.objects.get(pk=pk)
+
+    queryset = profile.user.is_following.all()
+    print(queryset)
+
+    c = {"following": queryset}
+    return render(request, template_name, c)
+
+
+
+
+
+def profile_chatgroups(request, pk, *args, **kwargs):
+    template_name = "chats/profile_chatgroups.html"
+    profile = Profile.objects.get(pk=pk)
+
+    queryset = ChatGroup.objects.filter(members__id=profile.user.id)
+
+    c = {"chatgroups": queryset}
+    return render(request, template_name, c)
+
+
+
+
+
+
+
+
+
+
+    '''
     def get_queryset(self):
         chatgroups = self.request.user.is_member.all()
         queryset = LocalChat.objects.all() # initial unmodified queryset
@@ -110,10 +243,49 @@ class TrendingLocalChatsList(ListView):
 
 
         return queryset
+        '''
 
 
 
 
+class TrendingGlobalChatsList(ListView):
+    model = GlobalChat
+    template_name = 'chats/trending_globalchats_list.html'
+
+
+
+    def get_queryset(self):
+
+        if self.request.user.is_authenticated:
+
+            queryset = GlobalChat.objects.all()
+            print(queryset)
+            chatgroups_followed = self.request.user.is_member.all()
+            print(chatgroups_followed)
+
+            for globalchat in queryset:
+                print(globalchat)
+                globalchat_chatgroup = globalchat.chatgroup
+
+                chatgroups_counter = chatgroups_followed.count()
+
+                for chatgroup in chatgroups_followed:
+                  if chatgroup.id != globalchat_chatgroup.id:
+                     chatgroups_counter -= 1
+                print(chatgroups_counter)
+
+                if chatgroups_counter == 0:
+                    queryset = queryset.exclude(label=globalchat.label)
+
+        else:
+            print("The use is not authenticated")
+
+            queryset = GlobalChat.objects.all()
+
+
+        print(queryset)
+
+        return queryset
 
 
 
@@ -130,27 +302,38 @@ class TrendingTopicsList(ListView):
 
     def get_queryset(self):
 
-        chatgroups = self.request.user.is_member.all()
 
-        print(chatgroups)
-        queryset = Topic.objects.all()
-        print(queryset)
-
-        '''
-        chatgroups = self.request.user.is_member.all()
-        queryset = Topic.objects.all() # initial unmodified queryset
-
-        print('The user is ' + str(self.request.user))
-        print(chatgroups)
+        if self.request.user.is_authenticated:
 
 
-        for topic in queryset:
-            for chatgroup in chatgroups:
-                if topic not in chatgroup.topic_set.all():
+            queryset = Topic.objects.all()
+            print(queryset)
+            chatgroups_followed = self.request.user.is_member.all()
+            print(chatgroups_followed)
+
+            for topic in queryset:
+                print(topic)
+                chatgroups_counter = chatgroups_followed.count()
+
+                for chatgroup in chatgroups_followed:
+                    if topic not in chatgroup.topic_set.all():
+                        chatgroups_counter -= 1
+                print(chatgroups_counter)
+
+                if chatgroups_counter == 0:
                     queryset = queryset.exclude(name = topic.name)
+
+        else:
+            print("The user is not authenticated, so he will see the entire queryset")
+            queryset = Topic.objects.all()
+
+
         print(queryset)
 
-        '''
+
+
+
+
 
 
 
@@ -215,7 +398,6 @@ class ChatGroupList(ListView):
 
 
 
-
    # def get_object(self):
     #    chat_group_id = self.kwargs.get("chat_group_id")
      #   if chat_group_id is None:
@@ -228,7 +410,9 @@ class ChatGroupList(ListView):
 
 
 
-
+class RecentActivityList(ListView):
+    model = Post
+    template_name = 'chats/recent_activity_list.html'
 
 
 '''

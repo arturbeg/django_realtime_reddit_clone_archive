@@ -17,7 +17,7 @@ socket.onmessage = function(message) {
          $('#chat').append(
 
 
-        '<div class="msg"> <a class="pull-left"> <img class="img-circle" src="" height="40px" width="40px" ></a> <h5>'
+        '<div class="msg"> <a class="pull-left"> <img class="img-circle" src=" '+ data.profile_avatar  + ' " height="40px" width="40px" ></a> <h5>'
          + data.user + '<span class="time">'+  data.timestamp + '</span></h5><p class="msg_body">'+ data.text + '</span></p></div><div style="clear:both"> </div>'
 
 
@@ -122,3 +122,7 @@ socket.onmessage = function(message) {
         return false;
     });
 //});
+
+
+
+

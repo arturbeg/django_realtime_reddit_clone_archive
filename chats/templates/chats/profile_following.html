@@ -1,0 +1,31 @@
+{% extends 'chats/base.html' %}
+
+
+
+{% block title %} New Topic {% endblock %}
+
+
+
+
+{% block content%}
+
+
+
+
+{% for profile in following %}
+
+
+{{ profile.user.username }} </br>
+
+
+
+
+{% endfor %}
+
+
+
+{% endblock %}
+
+
+
+
