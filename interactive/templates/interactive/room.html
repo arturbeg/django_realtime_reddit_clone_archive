@@ -364,16 +364,17 @@
 
 					<p class="msg_body">
 
-							{{message.text}} <span> Likes: {{message.get_number_of_likes}}</span>
+							{{message.text}}
 
-						<span>     Dislikes: {{message.get_number_of_dislikes}}</span>
-
-
+						<!--<span>     Dislikes: {{message.get_number_of_dislikes}}</span> -->
 
 
 
 
-						<input id="like" type="button" name="{{message.id}}" class="fa" value="&#xf004;" /> {% csrf_token %}
+
+
+						<input type="button" name="{{message.id}}" class="like fa" value="&#xf08a;" />
+						<span id="{{message.id}}" style="margin-left: 2px;" class="number_of_likes"> {{message.get_number_of_likes}}</span>
 
 
 

@@ -11,6 +11,7 @@ from django.template.context import RequestContext
 from django.db.models import Q
 from django.http import HttpResponse
 import json
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 
@@ -21,7 +22,7 @@ def like_a_message(request):
         message_id = request.POST.get('message_id')
         message = get_object_or_404(Message, id=message_id)
 
-        if message.likes.filter(id=user.id).exists():
+        if message.likers.filter(id=user.id).exists():
             # user has already liked this company
             # remove like/user
             message.likers.remove(user)
@@ -31,7 +32,7 @@ def like_a_message(request):
             message.likers.add(user)
             print("You liked this")
 
-    context = {'likes_count': message.get_number_of_likes()}
+    context = {'likes_count': message.get_number_of_likes(), 'message_id': message_id}
 
     return HttpResponse(json.dumps(context), content_type='application/json')
 
@@ -108,7 +109,7 @@ def chat_room_search(request):
 
 
 
-
+@ensure_csrf_cookie
 def chat_room(request, label, chat_room_type):
 
     if chat_room_type == "topic":

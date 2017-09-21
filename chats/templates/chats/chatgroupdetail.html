@@ -1,4 +1,5 @@
 {% extends 'chats/base.html' %}
+{% load staticfiles %}
 
 
 
@@ -38,14 +39,14 @@
 
       <h4> {{object.name}}
 
-      <button class="follow-btn-big btn"> Follow </button>
+      <button class="follow_chatgroup follow-btn-big btn"> Follow </button>
 
 
 
 
       </h4>
 
-      <button class="follow-btn btn"> Follow </button>
+      <button class="follow_chatgroup follow-btn btn"> Follow </button>
 
 
 
@@ -207,7 +208,7 @@
 
 
 
-
+<script type="text/javascript" src='{% static "chats/js/main.js" %}'></script>
 
 {% endblock %}
 
